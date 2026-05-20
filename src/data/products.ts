@@ -1,0 +1,138 @@
+export type Product = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  rating: number;
+  price: number;
+  imageUrl: string;
+};
+
+export const products: Product[] = [
+  {
+    id: 'p1',
+    title: 'Apple iPhone 15',
+    description: 'A premium flagship phone with incredible camera performance and long battery life.',
+    category: 'Electronics',
+    rating: 4.8,
+    price: 999,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Apple+iPhone+15',
+  },
+  {
+    id: 'p2',
+    title: 'Samsung Galaxy S24',
+    description: 'A powerful Android phone with a bright display and fast charging.',
+    category: 'Electronics',
+    rating: 4.7,
+    price: 899,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Galaxy+S24',
+  },
+  {
+    id: 'p3',
+    title: 'Sony WH-1000XM5 Headphones',
+    description: 'Industry-leading noise cancellation and premium sound for everyday listening.',
+    category: 'Audio',
+    rating: 4.6,
+    price: 349,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Sony+Headphones',
+  },
+  {
+    id: 'p4',
+    title: 'Nike Air Max 2024',
+    description: 'Lightweight sneakers with responsive cushioning for daily training.',
+    category: 'Apparel',
+    rating: 4.5,
+    price: 140,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Nike+Air+Max',
+  },
+  {
+    id: 'p5',
+    title: 'Levi’s 501 Original Jeans',
+    description: 'Comfortable straight-leg jeans with classic denim styling.',
+    category: 'Apparel',
+    rating: 4.4,
+    price: 89,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Levi%27s+Jeans',
+  },
+  {
+    id: 'p6',
+    title: 'Dell XPS 15 Laptop',
+    description: 'A sleek laptop with a vivid display, great performance, and long battery life.',
+    category: 'Computers',
+    rating: 4.7,
+    price: 1599,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Dell+XPS+15',
+  },
+  {
+    id: 'p7',
+    title: 'Canon EOS R10 Camera',
+    description: 'Mirrorless camera for creators who need excellent autofocus and compact portability.',
+    category: 'Photography',
+    rating: 4.5,
+    price: 979,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Canon+EOS+R10',
+  },
+  {
+    id: 'p8',
+    title: 'Apple MacBook Air',
+    description: 'Thin and light laptop with Apple silicon, exceptional battery life, and a vibrant display.',
+    category: 'Computers',
+    rating: 4.9,
+    price: 1199,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=MacBook+Air',
+  },
+  {
+    id: 'p9',
+    title: 'JBL Flip 6 Speaker',
+    description: 'Portable Bluetooth speaker with bold sound and IP67 water resistance.',
+    category: 'Audio',
+    rating: 4.4,
+    price: 129,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=JBL+Flip+6',
+  },
+  {
+    id: 'p10',
+    title: 'Oculus Quest 3',
+    description: 'Standalone VR headset built for immersive entertainment and fitness experiences.',
+    category: 'Gaming',
+    rating: 4.6,
+    price: 499,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Oculus+Quest+3',
+  },
+  {
+    id: 'p11',
+    title: 'Anker PowerCore 20K',
+    description: 'High-capacity portable charger for all your devices with fast charging support.',
+    category: 'Accessories',
+    rating: 4.5,
+    price: 59,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Anker+PowerCore',
+  },
+  {
+    id: 'p12',
+    title: 'Fitbit Versa 4',
+    description: 'Smartwatch for health tracking, workouts, notifications, and everyday wear.',
+    category: 'Fitness',
+    rating: 4.3,
+    price: 229,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Fitbit+Versa+4',
+  },
+  {
+    id: 'p13',
+    title: 'Samsung Galaxy Tab S9',
+    description: 'Android tablet with a stunning display and productivity-friendly stylus support.',
+    category: 'Computers',
+    rating: 4.5,
+    price: 799,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Galaxy+Tab+S9',
+  },
+  {
+    id: 'p14',
+    title: 'Google Pixel Buds Pro',
+    description: 'True wireless earbuds with adaptive sound and active noise canceling.',
+    category: 'Audio',
+    rating: 4.6,
+    price: 199,
+    imageUrl: 'https://via.placeholder.com/450x300.png?text=Pixel+Buds+Pro',
+  },
+];
