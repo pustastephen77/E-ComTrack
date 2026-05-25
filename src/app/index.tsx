@@ -2,11 +2,11 @@ import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { products } from '@/data/products';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { ProductCard } from '@/components/product-card';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { products } from '@/data/products';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -16,6 +16,14 @@ export default function HomeScreen() {
   );
   const featured = useMemo(
     () => [...products].sort((left, right) => right.rating - left.rating).slice(0, 4),
+    [],
+  );
+  const categoryCounts = useMemo(
+    () =>
+      products.reduce<Record<string, number>>((counts, product) => {
+        counts[product.category] = (counts[product.category] ?? 0) + 1;
+        return counts;
+      }, {}),
     [],
   );
 
@@ -42,7 +50,10 @@ export default function HomeScreen() {
         <View style={styles.categoryList}>
           {categories.map((category) => (
             <View key={category} style={styles.categoryChip}>
-              <ThemedText type="smallBold">{category}</ThemedText>
+              <ThemedText type="smallBold" style={styles.categoryLabel}>{category}</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary" style={styles.categoryCount}>
+                {categoryCounts[category]} items
+              </ThemedText>
             </View>
           ))}
         </View>
@@ -89,5 +100,11 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.five,
     borderWidth: 1,
     borderColor: '#888',
+  },
+  categoryLabel: {
+    marginBottom: Spacing.one,
+  },
+  categoryCount: {
+    lineHeight: 16,
   },
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Spacing } from '@/constants/theme';
-import { PriceRange } from '@/lib/search';
+import { PRICE_RANGES, PriceRange } from '@/lib/search';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
@@ -81,7 +81,9 @@ export function Filters({
               key={range}
               onPress={() => onSelectPriceRange(range)}
               style={[styles.chip, active && styles.chipActive]}>
-              <Text style={[styles.chipLabel, active && styles.chipLabelActive]}>{range === 'all' ? 'Any' : range}</Text>
+              <Text style={[styles.chipLabel, active && styles.chipLabelActive]}>
+                {range === 'all' ? 'Any' : PRICE_RANGES[range].label}
+              </Text>
             </Pressable>
           );
         })}

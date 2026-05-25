@@ -1,21 +1,30 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SearchEngine, SearchFilters } from '@/lib/search';
-import { products } from '@/data/products';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { Filters } from '@/components/filters';
 import { ProductCard } from '@/components/product-card';
 import { SearchBar } from '@/components/search-bar';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { products } from '@/data/products';
+import { SearchEngine, SearchFilters } from '@/lib/search';
 
 const defaultFilters: SearchFilters = {
   categories: [],
   minimumRating: 0,
   priceRange: 'all',
 };
+
+type SortOption = 'relevance' | 'priceLowToHigh' | 'priceHighToLow' | 'highestRating';
+
+const sortOptions: { key: SortOption; label: string }[] = [
+  { key: 'relevance', label: 'Relevance' },
+  { key: 'priceLowToHigh', label: 'Price: Low to High' },
+  { key: 'priceHighToLow', label: 'Price: High to Low' },
+  { key: 'highestRating', label: 'Top Rated' },
+];
 
 export default function SearchScreen() {
   const safeAreaInsets = useSafeAreaInsets();
@@ -29,11 +38,17 @@ export default function SearchScreen() {
   const searchEngine = useMemo(() => new SearchEngine(products), []);
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<SearchFilters>(defaultFilters);
+  const [sortBy, setSortBy] = useState<SortOption>('relevance');
   const categories = useMemo(() => searchEngine.getAvailableCategories(), [searchEngine]);
 
   const results = useMemo(
     () => searchEngine.search(query, filters),
     [searchEngine, query, filters],
+  );
+
+  const sortedResults = useMemo(
+    () => sortProducts(results, sortBy),
+    [results, sortBy],
   );
 
   function toggleCategory(category: string) {
@@ -88,18 +103,61 @@ export default function SearchScreen() {
         onClearFilters={clearFilters}
       />
       <ThemedView style={styles.summary} type="backgroundElement">
-        <ThemedText type="smallBold">{results.length} results</ThemedText>
+        <ThemedText type="smallBold">{sortedResults.length} results</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {query ? `Searching for “${query}”` : 'Browse by rating, category, and price.'}
         </ThemedText>
       </ThemedView>
+      <ThemedView style={styles.sortBar} type="backgroundElement">
+        <ThemedText type="smallBold">Sort by</ThemedText>
+        <View style={styles.sortRow}>
+          {sortOptions.map((option) => {
+            const active = option.key === sortBy;
+            return (
+              <Pressable
+                key={option.key}
+                onPress={() => setSortBy(option.key)}
+                style={[styles.sortChip, active && styles.sortChipActive]}>
+                <ThemedText type="small" style={active ? styles.sortLabelActive : styles.sortLabel}>
+                  {option.label}
+                </ThemedText>
+              </Pressable>
+            );
+          })}
+        </View>
+      </ThemedView>
       <View style={styles.results}>
-        {results.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {sortedResults.length === 0 ? (
+          <ThemedView style={styles.emptyState} type="backgroundElement">
+            <ThemedText type="subtitle">No products found</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              Try a different search term, adjust filters, or reset the query.
+            </ThemedText>
+          </ThemedView>
+        ) : (
+          sortedResults.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        )}
       </View>
     </ScrollView>
   );
+}
+
+function sortProducts(productsList: typeof products, sortBy: SortOption) {
+  return [...productsList].sort((left, right) => {
+    switch (sortBy) {
+      case 'priceLowToHigh':
+        return left.price - right.price;
+      case 'priceHighToLow':
+        return right.price - left.price;
+      case 'highestRating':
+        return right.rating - left.rating;
+      case 'relevance':
+      default:
+        return 0;
+    }
+  });
 }
 
 const styles = StyleSheet.create({
@@ -122,6 +180,38 @@ const styles = StyleSheet.create({
   summary: {
     borderRadius: Spacing.four,
     padding: Spacing.four,
+  },
+  sortBar: {
+    borderRadius: Spacing.four,
+    padding: Spacing.four,
+    gap: Spacing.two,
+  },
+  sortRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.two,
+  },
+  sortChip: {
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+    borderRadius: Spacing.five,
+    borderWidth: 1,
+    borderColor: '#888',
+  },
+  sortChipActive: {
+    backgroundColor: '#3C7DFF',
+    borderColor: '#3C7DFF',
+  },
+  sortLabel: {
+    color: '#333',
+  },
+  sortLabelActive: {
+    color: '#fff',
+  },
+  emptyState: {
+    borderRadius: Spacing.four,
+    padding: Spacing.four,
+    marginTop: Spacing.two,
   },
   results: {
     width: '100%',
