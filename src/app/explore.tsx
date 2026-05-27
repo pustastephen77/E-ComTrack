@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Filters } from '@/components/filters';
@@ -9,6 +9,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { products } from '@/data/products';
+import { useRequireAuth } from '@/lib/auth';
 import { SearchEngine, SearchFilters } from '@/lib/search';
 
 const defaultFilters: SearchFilters = {
@@ -27,7 +28,16 @@ const sortOptions: { key: SortOption; label: string }[] = [
 ];
 
 export default function SearchScreen() {
+  const { isLoading } = useRequireAuth();
   const safeAreaInsets = useSafeAreaInsets();
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
   const insets = {
     top: safeAreaInsets.top,
     bottom: safeAreaInsets.bottom + BottomTabInset,
@@ -212,6 +222,11 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.four,
     padding: Spacing.four,
     marginTop: Spacing.two,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   results: {
     width: '100%',
